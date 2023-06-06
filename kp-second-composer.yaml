@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kp-second-composer-deployment
+  labels:
+    app: kp-second-composer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kp-second-composer
+  template:
+    metadata:
+      labels:
+        app: kp-second-composer
+    spec:
+      containers:
+        - name: kp-second-composer
+          image: oski22/kp-second-composer:2.0.0
+          ports:
+          - containerPort: 8084
+          env:
+          - name: SECOND_SERVICE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: kp-config
+                key: kp-second-service-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kp-second-composer-k8s
+spec:
+  type: ClusterIP
+  selector:
+    app: kp-second-composer
+  ports:
+    - port: 8084
+      protocol: TCP
+      targetPort: 8084

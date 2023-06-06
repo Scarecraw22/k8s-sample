@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kp-config
+data:
+  kp-first-service-url: http://kp-first-service-k8s:8081/
+  kp-second-service-url: http://kp-second-service-k8s:8083/

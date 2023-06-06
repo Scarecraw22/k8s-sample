@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kp-first-service-deployment
+  labels:
+    app: kp-first-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kp-first-service
+  template:
+    metadata:
+      labels:
+        app: kp-first-service
+    spec:
+      containers:
+        - name: kp-first-service
+          image: oski22/kp-first-service:2.0.0
+          ports:
+          - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kp-first-service-k8s
+spec:
+  selector:
+    app: kp-first-service
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081

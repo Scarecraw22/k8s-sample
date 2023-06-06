@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kp-first-composer-deployment
+  labels:
+    app: kp-first-composer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kp-first-composer
+  template:
+    metadata:
+      labels:
+        app: kp-first-composer
+    spec:
+      containers:
+        - name: kp-first-composer
+          image: oski22/kp-first-composer:2.0.0
+          ports:
+          - containerPort: 8082
+          env:
+          - name: FIRST_SERVICE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: kp-config
+                key: kp-first-service-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kp-first-composer-k8s
+spec:
+  type: ClusterIP
+  selector:
+    app: kp-first-composer
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: 8082

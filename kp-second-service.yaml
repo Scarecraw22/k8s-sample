@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kp-second-service-deployment
+  labels:
+    app: kp-second-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kp-second-service
+  template:
+    metadata:
+      labels:
+        app: kp-second-service
+    spec:
+      containers:
+        - name: kp-second-service
+          image: oski22/kp-second-service:2.0.0
+          ports:
+          - containerPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kp-second-service-k8s
+spec:
+  selector:
+    app: kp-second-service
+  ports:
+    - port: 8083
+      protocol: TCP
+      targetPort: 8083
